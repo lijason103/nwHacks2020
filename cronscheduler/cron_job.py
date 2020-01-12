@@ -55,7 +55,7 @@ def main_process():
                     print(f'comparing <')
                     value = float(regex_sub(text))
                     target_value = float(regex_sub(target_value))
-                    condition_status = target_value < value
+                    condition_status = value < target_value
                     print(f'{target_value}')
                     print(f'{value}')
                     print(target_value < value)
@@ -64,7 +64,7 @@ def main_process():
                     print(f'comparing >')
                     value = float(regex_sub(text))
                     target_value = float(regex_sub(target_value))
-                    condition_status = target_value > value
+                    condition_status = value > target_value
                     print(f'{target_value}')
                     print(f'{value}')
                 elif condition == '"!="':
