@@ -3,6 +3,7 @@ const bodyParser = require('body-parser')
 
 const app = express()
 app.use(bodyParser.json())
+
 const port = 5000
 
 const standard_lib_token = 'tok_dev_eVoWNiq7rJ7u7H1vwYRa78ZytVfDWmrHhfS98NkWvmEag7qGgTbozEWUujtevB6T'
@@ -31,7 +32,7 @@ app.get('/jobs', (req, res) => {
 app.post('/jobs', (req, res) => {
     const { user_id, url, selector, condition, value } = req.body
     const id = 100
-
+    console.log(req.body);
     const addJob = async () => {
         await query.insert({
             range: "jobs!A1:G4",
