@@ -5,7 +5,6 @@ import json
 import scraper
 import google_sheets
 
-
 def job():
     print("Running Task")
     main_process()
@@ -33,7 +32,7 @@ def main_process():
 
             print(json.dumps(payload))
             
-            r = requests.put('http://localhost:5000/jobs', data = json.dumps(payload), headers=header)
+            r = requests.put('http://localhost:8080/jobs', data = json.dumps(payload), headers=header)
         else:
             if job['fields']['condition'] and job['fields']['value']:
                 print('CHECKING CONDITION')
@@ -58,9 +57,9 @@ def main_process():
                         'id': job['fields']['id'],
                         'user_id': job['fields']['user_id']
                     }
-                    r_sms = requests.post('http://localhost:5000/send-sms', data = json.dumps(payload), headers=header)
+                    r_sms = requests.post('http://localhost:8080/send-sms', data = json.dumps(payload), headers=header)
                     print(f'SEND SMS: {r_sms.status_code}')
-                    r_del = requests.delete('http://localhost:5000/jobs', data = json.dumps(payload), headers=header)
+                    r_del = requests.delete('http://localhost:8080/jobs', data = json.dumps(payload), headers=header)
                     print(f'DELETE: {r_del.status_code}')
             else:
                 if result[0].text != job['fields']['initial_value']:
@@ -69,9 +68,9 @@ def main_process():
                         'id': job['fields']['id'],
                         'user_id': job['fields']['user_id']
                     }
-                    r_sms = requests.post('http://localhost:5000/send-sms', data = json.dumps(payload), headers=header)
+                    r_sms = requests.post('http://localhost:8080/send-sms', data = json.dumps(payload), headers=header)
                     print(f'SEND SMS: {r_sms.status_code}')
-                    r_del = requests.delete('http://localhost:5000/jobs', data = json.dumps(payload), headers=header)
+                    r_del = requests.delete('http://localhost:8080/jobs', data = json.dumps(payload), headers=header)
                     print(f'DELETE: {r_del.status_code}')
             
 
