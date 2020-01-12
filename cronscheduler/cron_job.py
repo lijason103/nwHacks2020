@@ -98,11 +98,10 @@ def main_process():
             
 
 def main():
-    # schedule.every(1).minutes.do(job)
-    # while 1:
-    #     schedule.run_pending()
-    #     time.sleep(1)
-    job()
+    schedule.every(1).minutes.do(job)
+    while 1:
+        schedule.run_pending()
+        time.sleep(1)
 
 
 if __name__ == '__main__':
