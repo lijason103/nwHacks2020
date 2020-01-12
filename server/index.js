@@ -3,6 +3,7 @@ const bodyParser = require('body-parser')
 
 const app = express()
 app.use(bodyParser.json())
+
 const port = 5000
 
 const standard_lib_token = 'tok_dev_eVoWNiq7rJ7u7H1vwYRa78ZytVfDWmrHhfS98NkWvmEag7qGgTbozEWUujtevB6T'
@@ -31,7 +32,7 @@ app.get('/jobs', (req, res) => {
 app.post('/jobs', (req, res) => {
     const { user_id, url, selector, condition, value } = req.body
     const id = 100
-
+    console.log(req.body);
     const addJob = async () => {
         await query.insert({
             range: "jobs!A1:G4",
@@ -49,6 +50,50 @@ app.post('/jobs', (req, res) => {
         res.sendStatus(200)
     }
     addJob()
+})
+
+app.post('/jobs', (req, res) => {
+    const { id, user_id, url, selector, condition, value } = req.body
+    const id = 100
+
+    const addJob = async () => {
+        await query.insert({
+            range: "jobs!A1:G999",
+            fieldsets: [
+              {
+                "id": id,
+                "user_id": user_id,
+                "url": url,
+                "selector": selector,
+                "condition": condition,
+                "value": value,
+              }
+            ]
+        });
+        res.sendStatus(200)
+    }
+    addJob()
+})
+
+app.put('/jobs', (req, res) => {
+    const { id, initial_value, error } = req.body
+
+    const updateJob = async () => {
+        await query.update({
+            range: "jobs!A1:H999", // (required)
+            where: [
+              {
+                "id": id
+              }
+            ],
+            fields: {
+              "initial_value": initial_value,
+              "error": error
+            }
+        });
+        res.sendStatus(200)
+    }
+    updateJob()
 })
 
 app.post('/send-sms', (req, res) => {
