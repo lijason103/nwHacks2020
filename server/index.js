@@ -4,6 +4,7 @@ const uuidv1 = require("uuid/v1");
 
 const app = express();
 app.use(bodyParser.json());
+app.use(express.static('public'));
 
 const port = 5000;
 
