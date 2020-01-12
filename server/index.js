@@ -14,6 +14,7 @@ const standard_lib_token =
 const lib = require("lib")({ token: standard_lib_token });
 const query = lib.googlesheets.query["@0.3.0"];
 const channels = lib.slack.channels["@0.6.4"];
+const messageCreator = lib.lijason103['messageCreator']['@0.0.0']
 
 const jobRange = "jobs!A1:I999";
 const userRange = "users!A1:B100";
@@ -166,18 +167,24 @@ app.post("/send-sms", async (req, res) => {
   });
   const phoneNum = userResult.rows[0]["fields"]["phone_number"].substr(1);
 
-  let message = `The targetted value on ${url} is now `;
-  if (fields["condition"] === '"="') {
-    message += `equals to ${fields["value"]}.`;
-  } else if (fields["condition"] === '">"') {
-    message += `greater than ${fields["value"]}.`;
-  } else if (fields["condition"] === '"<"') {
-    message += `smaller than ${fields["value"]}.`;
+  const condition = fields["condition"]
+  let newCondition
+  if (condition === '"="') {
+    newCondition = "\"=\""
+  } else if (condition === '">"') {
+    newCondition = "\">\""
+  } else if (condition === '"<"') {
+    newCondition = "\"<\""
   } else {
-    message = `The targetted value on ${url} has been updated.`;
+    newCondition = ""
   }
-  const appName = `WatchDoge: [${user_id}]`;
-  const finalMessage = `${appName} - ${message}`;
+
+  const finalMessage = await messageCreator({
+    url,
+    condition,
+    value: fields["value"],
+    username: user_id
+  })
 
   await channels.messages.create({
     channel: "#team-watchdoge",
