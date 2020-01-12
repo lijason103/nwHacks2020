@@ -11,6 +11,7 @@ const standard_lib_token =
   "tok_dev_eVoWNiq7rJ7u7H1vwYRa78ZytVfDWmrHhfS98NkWvmEag7qGgTbozEWUujtevB6T";
 const lib = require("lib")({ token: standard_lib_token });
 const query = lib.googlesheets.query["@0.3.0"];
+const channels = lib.slack.channels['@0.6.4'];
 
 const jobRange = "jobs!A1:I999";
 const userRange = "users!A1:B100";
@@ -148,8 +149,7 @@ app.delete("/jobs", (req, res) => {
         }
       ],
       fields: {
-        id: "DELETED",
-        user_id: "DELETED"
+        id: "DELETED"
       }
     });
     res.sendStatus(200);
@@ -157,11 +157,38 @@ app.delete("/jobs", (req, res) => {
   deleteJob();
 });
 
-app.post("/send-sms", (req, res) => {
-  const { user_id, id } = req.body;
+app.post("/send-sms", async (req, res) => {
+    const { user_id, id } = req.body;
 
-  console.log("Sent");
-  res.send("Sent");
+    const result = await query.select({
+        range: jobRange,
+        where: [
+          {
+            id
+          }
+        ]
+    });
+    const row = result.rows[0]
+    const fields = row['fields']
+    const url = fields['url']
+    let message = `The targetted value on ${url} is now `
+    if (fields['condition'] === '"="') {
+        message += `equals to ${fields['value']}.`
+    } else if (fields['condition'] === '">"') {
+        message += `greater than ${fields['value']}.`
+    } else if (fields['condition'] === '"<"') {
+        message += `smaller than ${fields['value']}.`
+    } else {
+        message = `The targetted value on ${url} has been updated.`
+    }
+
+    const appName = `WatchDoge: [${user_id}]`
+
+    await channels.messages.create({
+        channel: "#team-watchdoge",
+        text: `${appName} - ${message}`
+    });
+    res.send("Sent");
 });
 
 app.get("/", (req, res) => res.send("Hello World!"));
