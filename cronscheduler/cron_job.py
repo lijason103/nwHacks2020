@@ -2,12 +2,17 @@ import requests
 import schedule
 import time
 import json
+import re
 import scraper
 import google_sheets
 
 def job():
     print("Running Task")
     main_process()
+
+
+def regex_sub(string):
+    return re.sub("[^0-9.]", "", string)
 
 
 def main_process():
@@ -18,15 +23,20 @@ def main_process():
             continue
 
         result = scraper.scrape(job['fields']['url'], job['fields']['selector'])
+        text = result[0].text
 
         header = {
             "Content-Type" : "application/json",
         }
 
         if job['fields']['initial_value'] == '':
+            print(job['fields']['condition'] in ['"<"', '">"'])
+            initial_value = regex_sub(text) if job['fields']['condition'] in ['"<"', '">"'] else text
+            print(initial_value)
+       
             payload = {
                 'id': job['fields']['id'],
-                'initial_value': result[0].text,
+                'initial_value': initial_value,
                 'error': job['fields']['error']
             }
 
@@ -37,20 +47,33 @@ def main_process():
             if job['fields']['condition'] and job['fields']['value']:
                 print('CHECKING CONDITION')
                 condition = job['fields']['condition']
-                value = job['fields']['value']
-                initial_value = job['fields']['initial_value']
+                target_value = job['fields']['value']
+                value = text
                 condition_status = None
                 
-                if condition == '<':
-                    condition_status = initial_value < value
-                elif condition == '>':
-                    condition_status = initial_value > value
-                elif condition == '!=':
-                    condition_status = initial_value != value
+                if condition == '"<"':
+                    print(f'comparing <')
+                    value = float(regex_sub(text))
+                    target_value = float(regex_sub(target_value))
+                    condition_status = target_value < value
+                    print(f'{target_value}')
+                    print(f'{value}')
+                    print(target_value < value)
+                 
+                elif condition == '">"':
+                    print(f'comparing >')
+                    value = float(regex_sub(text))
+                    target_value = float(regex_sub(target_value))
+                    condition_status = target_value > value
+                    print(f'{target_value}')
+                    print(f'{value}')
+                elif condition == '"!="':
+                    print(f'comparing !=')
+                    condition_status = target_value != value
                 else:
-                    condition_status = initial_value == value
-                print(f'{initial_value} == {value}: {initial_value == value}')
-                print(f'THIS IS CONDITION STATUS: {condition_status}')
+                    print(f'comparing =')
+                    condition_status = target_value == value
+ 
                 if condition_status:
                     print('value met condition')
                     payload = {
@@ -62,7 +85,7 @@ def main_process():
                     r_del = requests.delete('http://localhost:8080/jobs', data = json.dumps(payload), headers=header)
                     print(f'DELETE: {r_del.status_code}')
             else:
-                if result[0].text != job['fields']['initial_value']:
+                if text != job['fields']['initial_value']:
                     print(f'VALUE CHANGED')
                     payload = {
                         'id': job['fields']['id'],
@@ -75,10 +98,11 @@ def main_process():
             
 
 def main():
-    schedule.every(1).minutes.do(job)
-    while 1:
-        schedule.run_pending()
-        time.sleep(1)
+    # schedule.every(1).minutes.do(job)
+    # while 1:
+    #     schedule.run_pending()
+    #     time.sleep(1)
+    job()
 
 
 if __name__ == '__main__':
