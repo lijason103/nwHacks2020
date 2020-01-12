@@ -86,7 +86,7 @@ const Profile = ({
   };
 
   return (
-    <div className="page">
+    <div className="page page-profile">
       <div className="page-content">
         {loading ? (
           <CircularProgress style={{ margin: 30 }}/>

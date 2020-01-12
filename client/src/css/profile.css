@@ -2,6 +2,11 @@
   display: flex;
 }
 
+.page-profile {
+  background-color: #CDCDCD;
+  height: calc(100vh - 75px);
+}
+
 .page-container {
   padding-top: 30px;
   padding-left: 30px;
