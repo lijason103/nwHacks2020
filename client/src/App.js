@@ -6,20 +6,31 @@ import {
   Link,
 } from 'react-router-dom';
 
+
 import './App.css';
 import Header from './components/Header';
 import Index from './pages/index';
 import Profile from './pages/profile';
 
+import LoginModal from './components/LoginModal';
+
 const App = () => { 
-  const [loggedIn, setLoggedIn] = useState(true);
+  const [loggedIn, setLoggedIn] = useState(false);
   const [username, setUsername] = useState('Hello');
+  const [openModal, setOpenModal] = useState(true);
+
+  const handleLogin = ($username) => {
+    setLoggedIn(true);
+    setUsername($username);
+    setOpenModal(false);
+  }
   return (
     <Router>
       <div className="App">
         <Header
           loggedIn={loggedIn}
           username={username}
+          openModal={() => setOpenModal(true)}
         />
         <Switch>
           <Route exact path="/">
@@ -30,10 +41,18 @@ const App = () => {
           </Route>
           <Route path="/profile">
             <Profile
+              username={username}
               loggedIn={loggedIn}
             />
           </Route>
         </Switch>
+
+        <LoginModal
+          open={openModal}
+          onClose={() => setOpenModal(false)}
+          login={handleLogin}
+        />
+        
       </div>
     </Router>
     
