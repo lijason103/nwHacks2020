@@ -46,6 +46,8 @@ def main_process():
                     condition_status = initial_value < value
                 elif condition == '>':
                     condition_status = initial_value > value
+                elif condition == '!=':
+                    condition_status = initial_value != value
                 else:
                     condition_status = initial_value == value
                 print(f'{initial_value} == {value}: {initial_value == value}')
