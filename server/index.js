@@ -11,8 +11,25 @@ const lib = require('lib')({token: standard_lib_token});
 const query = lib.googlesheets.query['@0.3.0'];
 
 app.post('/login', (req, res) => {
-    const user_id = 'hi'
-    res.send({ user_id })
+    const { user_id } = req.body
+
+    // Check if user exists
+    const getUser = async () => {
+        const result = await query.count({
+            range: "users!A1:B100", // (required)
+            where: [
+              {
+                "user_id": user_id
+              }
+            ]
+        });
+        if (result.count === 1) {
+            res.sendStatus(200)
+        } else {
+            res.sendStatus(400)
+        }
+    }
+    getUser()
 })
 
 app.get('/jobs', (req, res) => {
@@ -53,7 +70,7 @@ app.post('/jobs', (req, res) => {
 })
 
 app.post('/jobs', (req, res) => {
-    const { id, user_id, url, selector, condition, value } = req.body
+    const { user_id, url, selector, condition, value } = req.body
     const id = 100
 
     const addJob = async () => {
