@@ -97,7 +97,7 @@ app.post('/jobs', (req, res) => {
 
 app.put('/jobs', (req, res) => {
     const { id, initial_value, error } = req.body
-
+    
     const updateJob = async () => {
         await query.update({
             range: jobRange, // (required)
@@ -116,7 +116,30 @@ app.put('/jobs', (req, res) => {
     updateJob()
 })
 
+app.delete('/jobs', (req, res) => {
+    const { user_id, id } = req.body
+
+    const deleteJob = async () => {
+        await query.update({
+            range: jobRange, // (required)
+            where: [
+              {
+                "id": id,
+                "user_id": user_id
+              }
+            ],
+            fields: {
+              "id": "DELETED"
+            }
+        });
+        res.sendStatus(200)
+    }
+    deleteJob()
+})
+
 app.post('/send-sms', (req, res) => {
+    const { user_id, id } = req.body
+
     console.log('Sent')
     res.send('Sent')
 })
