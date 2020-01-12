@@ -36,14 +36,18 @@ app.post('/login', (req, res) => {
 })
 
 app.get('/jobs', (req, res) => {
-    const user_id = 'hi'
+    const { user_id } = req.params
 
     // TODO: only send if it matches the user_id
     const getJobs = async () => {
         let result = await query.select({
-            range: jobRange
+            range: jobRange,
+            where: [
+                {
+                  "user_id": user_id
+                }
+            ]
         });
-        console.log(result)
         res.send(result.rows)
     }
     getJobs()
