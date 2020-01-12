@@ -1,0 +1,16 @@
+.modal-contents {
+  background-color: #ffff;
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  padding: 10px 0px 30px 0px;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-contents {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}

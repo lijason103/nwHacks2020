@@ -18,7 +18,10 @@ const RADIO_TRACK_CHANGE = 'Track Change';
 const RADIO_TRACK_THRESHOLD = 'Track Threshold';
 
 const SELECT_THRESHOLD_ITEMS = [
-  '!=', '\"==\"', '<', '>',
+  { value: '\"!=\"', item: '!=' },
+  { value: '\"=\"', item: '=' },
+  { value: '\"<\"', item: '<' },
+  { value: '\">\"', item: '>' },
 ];
 
 const Index = ({
@@ -29,7 +32,6 @@ const Index = ({
   const [radioValue, setRadioValue] = useState(RADIO_TRACK_THRESHOLD);
   const [thresholdOperator, setThresholdOperator] = useState('');
   const [thresholdValue, setThresholdValue] = useState('');
-
   const submitJob = () => {
     fetch('/jobs', {
       method: 'POST',
@@ -45,13 +47,21 @@ const Index = ({
         'Content-Type': 'application/json'
       },
     })
-      .then(response => response.json())
-      .then(response => console.log(response));
+      .then(response => {
+        if (response.status === 200) {
+          console.log('success');
+        }
+      })
+      .catch((err) => {
+        console.log('error');
+      })
   }
   return (
     <div className="page">
       <div className="page-content">
-        
+        <div className="top-page">
+
+        </div>
         <StyledTextField
           id="url-input"
           label="Input URL"
@@ -98,7 +108,7 @@ const Index = ({
               onChange={(e) => setThresholdOperator(e.target.value)}
             >
               {SELECT_THRESHOLD_ITEMS.map((item) => (
-                <MenuItem value={item} key={item}>{item}</MenuItem>
+                <MenuItem value={item.value} key={item.item}>{item.item}</MenuItem>
               ))}
             </Select>
             <StyledTextField

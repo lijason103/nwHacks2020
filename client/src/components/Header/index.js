@@ -2,14 +2,18 @@ import React , { useState } from 'react';
 import {
   AppBar, MenuItem, Menu,
 } from '@material-ui/core';
+import SearchIcon from '@material-ui/icons/Search';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+
 import {
-  Link, withRouter,
+  withRouter,
 } from 'react-router-dom';
 import './styles.css';
 
 const Header = ({
-  loggedIn, username, history,
+  loggedIn, username, history, openModal
 }) => {
+  
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
@@ -22,10 +26,17 @@ const Header = ({
   return (
     <AppBar>
       <div className="header">
-        <p>WebPage Change Tracker</p>
+        <div className="title">
+          <SearchIcon />
+          <h3>WebPage Change Tracker</h3>
+        </div>
+        
         {loggedIn ? (
-          <div>
-            <span onClick={handleMenu}>{username}</span>
+          <div className="navigate">
+            <div className="navigate-contents" onClick={handleMenu}>
+              <AccountCircleIcon style={{ marginRight: 5 }}/>
+              {username}
+            </div>
             <Menu
               open={open}
               onClose={handleCloseMenu}
@@ -41,7 +52,12 @@ const Header = ({
             </Menu>
           </div>
         ) : (
-          <p>Log in</p>
+          <div className="signUp" onClick={openModal}>
+            <h4>
+              Log in
+            </h4>
+            
+          </div>
         )}
       </div>
       

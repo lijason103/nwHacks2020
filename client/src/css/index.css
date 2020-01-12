@@ -7,3 +7,9 @@
 .threshold-input {
   display: flex;
 }
+
+.top-page {
+  height: 400px;
+  width: 100vw;
+  background-color: #3f51b5;
+}
