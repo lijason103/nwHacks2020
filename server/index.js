@@ -1,5 +1,6 @@
 const express = require('express')
 const bodyParser = require('body-parser')
+const uuidv1 = require('uuid/v1');
 
 const app = express()
 app.use(bodyParser.json())
@@ -71,8 +72,7 @@ app.get('/jobs', (req, res) => {
 
 app.post('/jobs', (req, res) => {
     const { user_id, url, selector, condition, value } = req.body
-    const id = 100
-    console.log(req.body);
+    const id = uuidv1()
     const addJob = async () => {
         await query.insert({
             range: jobRange,
