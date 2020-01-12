@@ -129,7 +129,8 @@ app.delete('/jobs', (req, res) => {
               }
             ],
             fields: {
-              "id": "DELETED"
+              "id": "DELETED",
+              "user_id": "DELETED"
             }
         });
         res.sendStatus(200)
