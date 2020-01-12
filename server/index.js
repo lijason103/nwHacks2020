@@ -10,13 +10,16 @@ const standard_lib_token = 'tok_dev_eVoWNiq7rJ7u7H1vwYRa78ZytVfDWmrHhfS98NkWvmEa
 const lib = require('lib')({token: standard_lib_token});
 const query = lib.googlesheets.query['@0.3.0'];
 
+const jobRange = "jobs!A1:I999"
+const userRange = "users!A1:B100"
+
 app.post('/login', (req, res) => {
     const { user_id } = req.body
 
     // Check if user exists
     const getUser = async () => {
         const result = await query.count({
-            range: "users!A1:B100", // (required)
+            range: userRange,
             where: [
               {
                 "user_id": user_id
@@ -38,7 +41,7 @@ app.get('/jobs', (req, res) => {
     // TODO: only send if it matches the user_id
     const getJobs = async () => {
         let result = await query.select({
-            range: "jobs!A1:G999" // (required)
+            range: jobRange
         });
         console.log(result)
         res.send(result.rows)
@@ -52,7 +55,7 @@ app.post('/jobs', (req, res) => {
     console.log(req.body);
     const addJob = async () => {
         await query.insert({
-            range: "jobs!A1:G4",
+            range: jobRange,
             fieldsets: [
               {
                 "id": id,
@@ -75,7 +78,7 @@ app.post('/jobs', (req, res) => {
 
     const addJob = async () => {
         await query.insert({
-            range: "jobs!A1:G999",
+            range: jobRange,
             fieldsets: [
               {
                 "id": id,
@@ -97,7 +100,7 @@ app.put('/jobs', (req, res) => {
 
     const updateJob = async () => {
         await query.update({
-            range: "jobs!A1:H999", // (required)
+            range: jobRange, // (required)
             where: [
               {
                 "id": id
