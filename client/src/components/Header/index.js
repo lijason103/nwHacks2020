@@ -11,7 +11,7 @@ import {
 import './styles.css';
 
 const Header = ({
-  loggedIn, username, history, openModal
+  loggedIn, username, history, openModal, handleLogout
 }) => {
   
   const [anchorEl, setAnchorEl] = useState(null);
@@ -23,9 +23,16 @@ const Header = ({
     history.push('/profile');
     setAnchorEl(null);
   };
+  
   const navigateToHome = () => {
     history.push('/');
   };
+  
+  const logout = () => {
+    handleLogout();
+    window.location.href = '/'
+  };
+
   return (
     <AppBar>
       <div className="header">
@@ -51,7 +58,7 @@ const Header = ({
               keepMounted
             >
               <MenuItem onClick={navigateToProfile}>View Trackers</MenuItem>
-              <MenuItem>Log out</MenuItem>
+              <MenuItem onClick={logout}>Log out</MenuItem>
             </Menu>
           </div>
         ) : (

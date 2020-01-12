@@ -1,3 +1,17 @@
 .job-containers {
   display: flex;
 }
+
+.page-container {
+  padding-top: 30px;
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+.add-tracker {
+  cursor: pointer;
+}
+
+.add-tracker:hover {
+  color: #3f51b5;
+}

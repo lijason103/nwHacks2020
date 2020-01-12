@@ -8,6 +8,9 @@ import {
 } from '@material-ui/core';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 
+import SuccessModal from '../components/SuccessModal';
+import ErrorModal from '../components/ErrorModal';
+
 const StyledTextField = withStyles({
   root: {
     // backgroundColor: 'black',
@@ -50,9 +53,10 @@ const Index = ({
   const [thresholdOperator, setThresholdOperator] = useState('');
   const [thresholdValue, setThresholdValue] = useState('');
 
+  const [successModal, setSuccessModal] = useState(false);
+  const [errorModal, setErrorModal] = useState(false);
+
   const submitJob = () => {
-    // TODO: add error modal if not signed in
-    // TODO: add success
     if (!loggedIn) {
       return;
     }
@@ -72,11 +76,13 @@ const Index = ({
     })
       .then(response => {
         if (response.status === 200) {
-          console.log('success');
+          setSuccessModal(true);
+        } else {
+          setErrorModal(true);
         }
       })
       .catch((err) => {
-        console.log('error');
+        setErrorModal(true);
       })
   }
   return (
@@ -88,7 +94,7 @@ const Index = ({
             <p>Track a web page's text by entering the url and the css tag associated with the text.</p>
           </div>
           <div className="image-container">
-            <img src={require('../assets/doge.jpg')} className="image" />
+            <img src={require('../assets/doge.png')} className="image" />
           </div>
         </div>
         <div style={{ width: '70%' }}>
@@ -190,6 +196,15 @@ const Index = ({
           </Button>
         </div>
       </div>
+
+      <SuccessModal
+        open={successModal}
+        onClose={() => setSuccessModal(false)}
+      />
+      <ErrorModal
+        open={errorModal}
+        onClose={() => setErrorModal(false)}
+      />
     </div>
   );
 };

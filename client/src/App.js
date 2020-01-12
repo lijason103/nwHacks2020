@@ -16,14 +16,20 @@ import LoginModal from './components/LoginModal';
 
 const App = () => { 
   const [loggedIn, setLoggedIn] = useState(false);
-  const [username, setUsername] = useState('Hello');
+  const [username, setUsername] = useState('');
   const [openModal, setOpenModal] = useState(false);
 
   const handleLogin = ($username) => {
     setLoggedIn(true);
     setUsername($username);
     setOpenModal(false);
-  }
+  };
+
+  const handleLogout = () => {
+    setLoggedIn(false);
+    setUsername('');
+  };
+
   return (
     <Router>
       <div className="App">
@@ -31,6 +37,7 @@ const App = () => {
           loggedIn={loggedIn}
           username={username}
           openModal={() => setOpenModal(true)}
+          handleLogout={handleLogout}
         />
         <Switch>
           <Route exact path="/">
