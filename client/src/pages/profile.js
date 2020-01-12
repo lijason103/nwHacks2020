@@ -3,14 +3,20 @@ import {
   Card, CardContent, CardActions,
   Button, CircularProgress } from '@material-ui/core';
 
+import {
+  withRouter,
+} from 'react-router-dom';
 import '../css/profile.css';
 
 const Profile = ({
-  username,
+  username, loggedIn, history,
 }) => {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
+    if (!loggedIn) {
+      history.push('/');
+    }
     fetch(`/jobs?user_id=${username}`)
       .then(response => response.json())
       .then(response => {
@@ -64,4 +70,4 @@ const Profile = ({
   );
 };
 
-export default Profile;
+export default withRouter(Profile);

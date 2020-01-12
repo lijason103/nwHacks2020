@@ -17,7 +17,7 @@ import LoginModal from './components/LoginModal';
 const App = () => { 
   const [loggedIn, setLoggedIn] = useState(false);
   const [username, setUsername] = useState('Hello');
-  const [openModal, setOpenModal] = useState(true);
+  const [openModal, setOpenModal] = useState(false);
 
   const handleLogin = ($username) => {
     setLoggedIn(true);

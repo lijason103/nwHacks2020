@@ -2,10 +2,15 @@ import React, { useState } from 'react';
 import { Modal, TextField, Button, CircularProgress } from '@material-ui/core';
 import './styles.css';
 
+import {
+  withRouter,
+} from 'react-router-dom';
+
 const LoginModal = ({
-  open, onClose, login,
+  open, onClose, login, history,
 }) => {
   const [logging, setLogging] = useState(false);
+  const [message, setMessage] = useState('');
   const [username, setUsername] = useState('');
 
   const sendLogin = (e) => {
@@ -23,8 +28,10 @@ const LoginModal = ({
       .then(response => {
         if (response.status === 200) {
           login(username);
+          history.push('/profile');
         } else {
-          alert('err')
+          setLogging(false);
+          setMessage('Invalid username.')
         }
       })
       .catch(err => {
@@ -54,6 +61,7 @@ const LoginModal = ({
                 margin="dense"
                 placeholder="Type your username..."
                 style={{ marginBottom: 20 }}
+                helperText={message.length > 0 && message}
               />
               <Button
                 variant="contained"
@@ -72,4 +80,4 @@ const LoginModal = ({
   );
 }
 
-export default LoginModal;
+export default withRouter(LoginModal);

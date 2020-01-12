@@ -22,13 +22,16 @@ const Header = ({
   const navigateToProfile = () => {
     history.push('/profile');
     setAnchorEl(null);
-  }
+  };
+  const navigateToHome = () => {
+    history.push('/');
+  };
   return (
     <AppBar>
       <div className="header">
-        <div className="title">
+        <div className="title" onClick={navigateToHome}>
           <SearchIcon />
-          <h3>WebPage Change Tracker</h3>
+          <h3>Watch Doge</h3>
         </div>
         
         {loggedIn ? (

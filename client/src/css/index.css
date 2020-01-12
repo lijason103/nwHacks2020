@@ -6,10 +6,48 @@
 
 .threshold-input {
   display: flex;
+  flex-direction: row;
+}
+
+.image-container {
+  display: flex;
+}
+
+.image {
+  width: 60%;
+  max-height: 400px;
+  margin: auto;
 }
 
 .top-page {
-  height: 400px;
+  height: 250px;
   width: 100vw;
-  background-color: #3f51b5;
+  background-image: linear-gradient(to bottom right, #3f51b5, #6574C4);
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+}
+
+.top-page .title {
+  margin-left: 30px;
+  font-size: 1.5rem;
+}
+
+.top-page p {
+  margin-left: 30px;
+}
+
+.additional-info {
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.additional-info-show {
+  visibility: visible;
+  opacity: 1;
+  transition:visibility 0.5s linear,opacity 0.5s linear;
 }
