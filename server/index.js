@@ -16,6 +16,11 @@ const userRange = "users!A1:B100"
 app.post('/login', (req, res) => {
     const { user_id } = req.body
 
+    if (user_id === 'DELETED') {
+        res.sendStatus(400)
+        return
+    }
+
     // Check if user exists
     const getUser = async () => {
         const result = await query.count({
@@ -35,8 +40,19 @@ app.post('/login', (req, res) => {
     getUser()
 })
 
+app.get('/all-jobs', (req, res) => {
+    const getJobs = async () => {
+        let result = await query.select({
+            range: jobRange,
+        });
+        res.send(result.rows)
+    }
+    getJobs()
+})
+
+
 app.get('/jobs', (req, res) => {
-    const { user_id } = req.params
+    const { user_id } = req.query
 
     // TODO: only send if it matches the user_id
     const getJobs = async () => {
@@ -129,7 +145,6 @@ app.delete('/jobs', (req, res) => {
             where: [
               {
                 "id": id,
-                "user_id": user_id
               }
             ],
             fields: {
